@@ -35,10 +35,10 @@ if [ -z ${use_tracers+x} ]; then
 fi
 
 ## Enable Cachy CPU scheduler by default https://github.com/xanmod/linux/blob/5.8/Documentation/scheduler/sched-Cachy.rst
-## Set variable "use_cachy" to: n to disable (stock Xanmod)
+## Set variable "use_cacule" to: n to disable (stock Xanmod)
 ##                              y to enable
-if [ -z ${use_cachy+x} ]; then
-  use_cachy=n
+if [ -z ${use_cacule+x} ]; then
+  use_cacule=n
 fi
 
 ## Enable CONFIG_USER_NS_UNPRIVILEGED flag https://aur.archlinux.org/cgit/aur.git/tree/0001-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch?h=linux-ck
@@ -103,11 +103,10 @@ sha256sums=('dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43'
             '03bb8b234a67b877a34a8212936ba69d8700c54c7877686cbd9742a536c87134'
             '6c66dba73251440352f93ff32b72f5dd49536d0f17ef9347867660fd3a626991')
 
-# If use_cachy=y then download cachy patch
-if [ "$use_cachy" = "y" ]; then
-   echo "Cachy branch is not ready yet..." && exit 1
-   source+=("https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}-cachy/patch-${pkgver}-xanmod${xanmod}-cachy.xz")
-   sha256sums+=('c35685c5d706a683fc0b02cf11fd40db52becae9205bf0d71f6a4a901d836d69')
+# If use_cacule=y then download cacule patch
+if [ "$use_cacule" = "y" ]; then
+   source+=("https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}-cacule/patch-${pkgver}-xanmod${xanmod}-cacule.xz")
+   sha256sums+=('9335f23561cc7796609783418659c1402fc67008a3f0ea39d822f742aec0731b')
 fi
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
@@ -118,8 +117,8 @@ prepare() {
   cd linux-${_major}
 
   # Apply Xanmod patch
-  if [ "$use_cachy" = "y" ]; then
-    patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}-cachy
+  if [ "$use_cacule" = "y" ]; then
+    patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}-cacule
   else
     patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}
   fi
@@ -158,7 +157,7 @@ prepare() {
     scripts/config --disable CONFIG_NUMA
   fi
 
-  if [ "$use_cachy" = "y" ]; then
+  if [ "$use_cacule" = "y" ]; then
     msg2 "Enabling Cachy CPU scheduler by default..."
     scripts/config --enable CONFIG_CACHY_SCHED
   fi
